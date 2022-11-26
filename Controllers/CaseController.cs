@@ -1,4 +1,5 @@
 ﻿using CaseTracker.Data;
+using CaseTracker.Data.Repo;
 using CaseTracker.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,34 +13,37 @@ namespace CaseTracker.Controllers
     [ApiController]
     public class CaseController : ControllerBase
     {
-        private readonly DataContext dc;
-        public CaseController(DataContext dc)
+        
+        private readonly ICaseRepository repo;
+
+        public CaseController(ICaseRepository repo)
         {
-            this.dc=dc;
+            
+            this.repo = repo;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCases()
         {
-            var cases = await dc.Cases.ToListAsync();
+            var cases = await repo.GetCasesAsync();
 
             return Ok(cases);
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetCase(int casenumber)
-        {
-            var cases = await dc.Cases.FindAsync(casenumber);
+        //[HttpGet]
+        //public async Task<IActionResult> GetCase(int casenumber)
+        //{
+        //    var cases = await dc.Cases.FindAsync(casenumber);
 
-            if(casenumber!=null)
-            {
-                return Ok(cases);
-            }  
-            else
-                return NotFound();
+        //    if(casenumber!=null)
+        //    {
+        //        return Ok(cases);
+        //    }  
+        //    else
+        //        return NotFound();
             
-        }
+        //}
 
 
         [HttpPost]
@@ -54,10 +58,10 @@ namespace CaseTracker.Controllers
             cc.DateOfArrival=casesss.DateOfArrival;
             cc.Workload = casesss.Workload;
             
-             await dc.Cases.AddAsync(cc);
-            await dc.SaveChangesAsync();
+              repo.AddCase(cc);
+            await repo.SaveAsync();
 
-            return Ok();
+            return StatusCode(201);
         }
     }
 }
