@@ -1,4 +1,5 @@
-﻿using CaseTracker.Models;
+﻿using CaseTracker.Interfaces;
+using CaseTracker.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,9 +24,6 @@ namespace CaseTracker.Data.Repo
             return await dc.Cases.ToListAsync();
         }
 
-        public async Task<bool> SaveAsync()
-        {
-            return await dc.SaveChangesAsync() > 0;
-        }
+        
     }
 }

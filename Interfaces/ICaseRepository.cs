@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CaseTracker.Data.Repo
+namespace CaseTracker.Interfaces
 {
     public interface ICaseRepository
     {
@@ -11,6 +11,6 @@ namespace CaseTracker.Data.Repo
 
         void AddCase(Case casess);
 
-        Task<bool> SaveAsync();
+      
     }
 }
