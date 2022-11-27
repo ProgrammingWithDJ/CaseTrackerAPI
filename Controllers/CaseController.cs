@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using CaseTracker.Dtos;
+using System;
 
 namespace CaseTracker.Controllers
 {
@@ -29,7 +31,20 @@ namespace CaseTracker.Controllers
         {
             var cases = await uow.CaseRepository.GetCasesAsync();
 
-            return Ok(cases);
+            var casesDTO = from c in cases
+                           select new CaseDtos()
+                           {
+                               CaseNumber = c.CaseNumber,
+                               Active= c.Active,
+                               Survey  =    c.Survey,
+                               DateOfArrival= c.DateOfArrival,
+                               CloseDate  = c.CloseDate,
+                               Region= c.Region,
+                               Workload= c.Workload
+                               
+                           };
+
+            return Ok(casesDTO);
         }
 
 
@@ -49,18 +64,21 @@ namespace CaseTracker.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddCases(Case casesss)
+        public async Task<IActionResult> AddCases(CaseDtos caseDto)
         {
-            Case cc=new Case();
+            var casesINrepo = new Case
+            {
+                CaseNumber = caseDto.CaseNumber,
+                Workload = caseDto.Workload,
+                Region = caseDto.Region,
+                Active = 1,
+                Survey = 0,
+                DateOfArrival = DateTime.Now
 
-            cc.CaseNumber = casesss.CaseNumber;
-            cc.Region = casesss.Region;
-            cc.Active = 1;
-            cc.Survey = 0;
-            cc.DateOfArrival=casesss.DateOfArrival;
-            cc.Workload = casesss.Workload;
-            
-              uow.CaseRepository.AddCase(cc);
+
+            };
+
+              uow.CaseRepository.AddCase(casesINrepo);
             await uow.SaveChangesAsync();
 
             return StatusCode(201);
