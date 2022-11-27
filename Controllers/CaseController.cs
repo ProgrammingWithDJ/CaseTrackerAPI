@@ -1,5 +1,5 @@
 ﻿using CaseTracker.Data;
-using CaseTracker.Data.Repo;
+using CaseTracker.Interfaces;
 using CaseTracker.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,18 +14,20 @@ namespace CaseTracker.Controllers
     public class CaseController : ControllerBase
     {
         
-        private readonly ICaseRepository repo;
+        
+        private readonly IUnitOfWork uow;
 
-        public CaseController(ICaseRepository repo)
+        public CaseController(IUnitOfWork Uow)
         {
             
-            this.repo = repo;
+         
+            uow = Uow;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCases()
         {
-            var cases = await repo.GetCasesAsync();
+            var cases = await uow.CaseRepository.GetCasesAsync();
 
             return Ok(cases);
         }
@@ -58,8 +60,8 @@ namespace CaseTracker.Controllers
             cc.DateOfArrival=casesss.DateOfArrival;
             cc.Workload = casesss.Workload;
             
-              repo.AddCase(cc);
-            await repo.SaveAsync();
+              uow.CaseRepository.AddCase(cc);
+            await uow.SaveChangesAsync();
 
             return StatusCode(201);
         }
