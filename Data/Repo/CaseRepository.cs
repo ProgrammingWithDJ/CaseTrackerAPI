@@ -19,6 +19,11 @@ namespace CaseTracker.Data.Repo
             dc.Cases.AddAsync(casess);
         }
 
+        public async Task<Case> FindCase(int caseId)
+        {
+            return await dc.Cases.FindAsync(caseId);
+        }
+
         public async Task<IEnumerable<Case>> GetCasesAsync()
         {
             return await dc.Cases.ToListAsync();
