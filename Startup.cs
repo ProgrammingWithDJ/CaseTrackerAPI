@@ -1,5 +1,6 @@
 using CaseTracker.Data;
 using CaseTracker.Data.Repo;
+using CaseTracker.Helpers;
 using CaseTracker.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,7 @@ namespace CaseTracker
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddControllers();
             services.AddCors();
+            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
