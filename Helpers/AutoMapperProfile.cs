@@ -8,7 +8,9 @@ namespace CaseTracker.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<Case, CaseDtos>().ReverseMap(); 
+            CreateMap<Case, CaseDtos>().ReverseMap();
+
+            CreateMap<Case, CaseUpdateDtos>().ReverseMap();
         }
     }
 }
