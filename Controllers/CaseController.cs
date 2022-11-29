@@ -10,6 +10,7 @@ using CaseTracker.Dtos;
 using System;
 using AutoMapper;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace CaseTracker.Controllers
 {
@@ -73,6 +74,18 @@ namespace CaseTracker.Controllers
             await uow.SaveChangesAsync();
 
             return StatusCode(201);
+        }
+
+        [HttpPut("reassign/{id}")]
+        public async Task<IActionResult> UpdateCase(int id, CaseUpdateDtos caseToPatch)
+        {
+            var caseFromDb = await uow.CaseRepository.FindCase(id);
+            
+            mapper.Map(caseToPatch,caseFromDb);   
+
+            await uow.SaveChangesAsync();
+
+            return StatusCode(200);
         }
     }
 }
