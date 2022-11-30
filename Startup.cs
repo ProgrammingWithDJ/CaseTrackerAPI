@@ -3,6 +3,7 @@ using CaseTracker.Data.Repo;
 using CaseTracker.Extensions;
 using CaseTracker.Helpers;
 using CaseTracker.Interfaces;
+using CaseTracker.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -44,8 +45,9 @@ namespace CaseTracker
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.ConfigureExceptionHandler(env);
+            //app.ConfigureExceptionHandler(env);
 
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseRouting();
 
             app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); 
