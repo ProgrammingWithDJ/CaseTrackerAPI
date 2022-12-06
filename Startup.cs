@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace CaseTracker
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddControllers();
             services.AddCors();
+            services.AddMicrosoftIdentityWebApiAuthentication(Configuration);
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
@@ -49,6 +51,21 @@ namespace CaseTracker
 
             
             app.UseRouting();
+
+            app.UseAuthentication();
+
+            app.Use(async(context, next) =>
+            {
+                if(!context.User.Identity?.IsAuthenticated ?? false)
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("Not Authenticated");   
+                }
+                else
+                {
+                    await next();
+                }
+            });
 
             app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); 
 
