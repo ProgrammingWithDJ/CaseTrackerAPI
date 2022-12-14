@@ -52,23 +52,24 @@ namespace CaseTracker
             
             app.UseRouting();
 
+            //app.UseAuthentication();
+
+            //app.Use(async(context, next) =>
+            //{
+            ////    if(!context.User.Identity?.IsAuthenticated ?? false)
+            ////    {
+            ////        context.Response.StatusCode = 401;
+            ////        await context.Response.WriteAsync("Not Authenticated");   
+            ////    }
+            ////    else
+            ////    {
+            //        await next();
+            //   // }
+            //});
+
+            //app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
             app.UseAuthentication();
-
-            app.Use(async(context, next) =>
-            {
-                if(!context.User.Identity?.IsAuthenticated ?? false)
-                {
-                    context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("Not Authenticated");   
-                }
-                else
-                {
-                    await next();
-                }
-            });
-
-            app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); 
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
