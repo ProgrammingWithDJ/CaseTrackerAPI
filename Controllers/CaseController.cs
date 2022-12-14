@@ -11,15 +11,19 @@ using System;
 using AutoMapper;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web.Resource;
 
 namespace CaseTracker.Controllers
 {
     [Route("api/[controller]")]
+  //[RequiredScope(RequiredScopesConfigurationKey ="AzureAd:Scopes")]
+  //[Authorize]
     [ApiController]
     public class CaseController : ControllerBase
     {
-        
-        
+
+        static readonly string[] scopesByAPI = new string[] { "Case.Read" };
         private readonly IUnitOfWork uow;
         private readonly IMapper mapper;
 
@@ -33,6 +37,8 @@ namespace CaseTracker.Controllers
 
        
         [HttpGet]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+       [Authorize(Roles = "Case.Read")]
         public async Task<IActionResult> GetCases()
         {
             var cases = await uow.CaseRepository.GetCasesAsync();
@@ -45,6 +51,8 @@ namespace CaseTracker.Controllers
 
         [Route("{id}")]
         [HttpGet]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+        [Authorize(Roles = "Case.Read")]
         public async Task<IActionResult> GetCase(int id)
         {
             var cases = await uow.CaseRepository.FindCase(id);
@@ -60,6 +68,8 @@ namespace CaseTracker.Controllers
 
 
         [HttpPost]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+        [Authorize(Roles = "Case.Admin")]
         public async Task<IActionResult> AddCases(CaseDtos caseDto)
         {
 
@@ -77,6 +87,8 @@ namespace CaseTracker.Controllers
         }
 
         [HttpPut("reassign/{id}")]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+        [Authorize(Roles = "Case.Read")]
         public async Task<IActionResult> UpdateCase(int id, CaseUpdateDtos caseToPatch)
         {
             var caseFromDb = await uow.CaseRepository.FindCase(id);
