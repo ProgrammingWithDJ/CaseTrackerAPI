@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System;
 
 namespace CaseTracker.Data.Repo
 {
@@ -38,6 +39,25 @@ namespace CaseTracker.Data.Repo
             return await dc.Cases.ToListAsync();
         }
 
-        
+        public async Task<SummaryMode> GetSummary()
+        {
+            SummaryMode sm=new SummaryMode();
+
+            var countedcases=await dc.Cases.ToListAsync();
+           sm.TotalCases= countedcases.Count;
+
+            var today = await dc.Cases.Where(x => x.DateOfArrival.Day == DateTime.Today.Day).ToListAsync();
+
+            var surveyCount = await dc.Cases.Where(x => x.DateOfArrival.Day == DateTime.Today.Day
+
+            && x.Survey == 1         
+            ).ToListAsync();
+
+            sm.TotalCaseToday=today.Count;
+            sm.TotalSurvey=surveyCount.Count;   
+
+            return sm;
+        }
+
     }
 }

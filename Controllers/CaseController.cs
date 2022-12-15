@@ -17,8 +17,8 @@ using Microsoft.Identity.Web.Resource;
 namespace CaseTracker.Controllers
 {
     [Route("api/[controller]")]
-  //[RequiredScope(RequiredScopesConfigurationKey ="AzureAd:Scopes")]
-  //[Authorize]
+  [RequiredScope(RequiredScopesConfigurationKey ="AzureAd:Scopes")]
+  [Authorize]
     [ApiController]
     public class CaseController : ControllerBase
     {
@@ -37,7 +37,7 @@ namespace CaseTracker.Controllers
 
        
         [HttpGet]
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+      [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
        [Authorize(Roles = "Case.Read")]
         public async Task<IActionResult> GetCases()
         {
@@ -68,7 +68,7 @@ namespace CaseTracker.Controllers
 
 
         [HttpPost]
-        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+       [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         [Authorize(Roles = "Case.Admin")]
         public async Task<IActionResult> AddCases(CaseDtos caseDto)
         {
@@ -98,6 +98,15 @@ namespace CaseTracker.Controllers
             await uow.SaveChangesAsync();
 
             return StatusCode(200);
+        }
+
+        [HttpGet("GetSummary")]
+        public async Task<IActionResult> getCaseSummary()
+        {
+            var summaryfromcode = await uow.CaseRepository.GetSummary();
+
+
+            return Ok(summaryfromcode);
         }
     }
 }
