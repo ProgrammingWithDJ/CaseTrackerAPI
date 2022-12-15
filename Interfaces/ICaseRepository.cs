@@ -12,5 +12,7 @@ namespace CaseTracker.Interfaces
         void AddCase(Case casess);
 
         Task<Case> FindCase(int caseId);
+
+        Task<SummaryMode> GetSummary();
     }
 }
