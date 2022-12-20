@@ -13,6 +13,8 @@ namespace CaseTracker.Models
 
         public int TotalSurvey { get; set; }
 
+        public int TotalClosed { get; set; }
+
 
 
     }
