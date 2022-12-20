@@ -39,6 +39,7 @@ namespace CaseTracker.Data.Repo
             return await dc.Cases.ToListAsync();
         }
 
+
         public async Task<SummaryMode> GetSummary()
         {
             SummaryMode sm=new SummaryMode();
@@ -48,10 +49,7 @@ namespace CaseTracker.Data.Repo
 
             var today = await dc.Cases.Where(x => x.DateOfArrival.Day == DateTime.Today.Day).ToListAsync();
 
-            var surveyCount = await dc.Cases.Where(x => x.DateOfArrival.Day == DateTime.Today.Day
-
-            && x.Survey == 1         
-            ).ToListAsync();
+            var surveyCount = await dc.Cases.Where(x =>x.Survey == 1).ToListAsync();
 
             sm.TotalCaseToday=today.Count;
             sm.TotalSurvey=surveyCount.Count;   
