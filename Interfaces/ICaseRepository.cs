@@ -14,5 +14,7 @@ namespace CaseTracker.Interfaces
         Task<Case> FindCase(int caseId);
 
         Task<SummaryMode> GetSummary();
+
+        Task<IEnumerable<Case>> GetCasesByEngineerAsync(int userID);
     }
 }

@@ -39,6 +39,10 @@ namespace CaseTracker.Data.Repo
             return await dc.Cases.ToListAsync();
         }
 
+        public async Task<IEnumerable<Case>> GetCasesByEngineerAsync(int userID)
+        {
+            return await dc.Cases.Where(x => x.engineer.Id==userID).ToListAsync();
+        }
 
         public async Task<SummaryMode> GetSummary()
         {
