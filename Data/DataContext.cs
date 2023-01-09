@@ -7,6 +7,8 @@ namespace CaseTracker.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<Case> Cases{get;set;}
+        public DbSet<Case> Cases { get; set; }
+
+        public DbSet<SupporEngineer> Engineer { get; set; }
     }
 }

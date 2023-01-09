@@ -24,5 +24,7 @@ namespace CaseTracker.Models
 
         public int Survey { get; set; }
 
+        public SupporEngineer engineer { get; set; } 
+
     }
 }
